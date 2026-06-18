@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>PromptLab Studios — Memes &amp; Vedic Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#14121c;
+    --panel:#1e1b29;
+    --panel-2:#272234;
+    --field:#2f2940;
+    --line:#3a3349;
+    --line-soft:#2c2638;
+    --text:#f2eef7;
+    --muted:#9a92ac;
+    --muted-2:#6f6883;
+
+    --press:#ff5240;      /* Memes tab accent */
+    --press-2:#ffc83d;
+
+    --divine:#ffb02e;     /* Divine Energy tab accent */
+    --divine-2:#ff8c40;
+    --video:#7c5cff;      /* Video crew accent */
+    --video-2:#43d9a3;
+
+    --ok:#43d9a3;
+    --fix:#ffc83d;
+    --flag:#ff6b81;
+
+    --r-lg:20px; --r-md:14px; --r-sm:10px;
+    --shadow:0 18px 50px -22px rgba(0,0,0,.75);
+    --maxw:1320px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1100px 620px at 84% -8%, rgba(255,176,46,.10), transparent 60%),
+      radial-gradient(1000px 560px at 6% -4%, rgba(255,82,64,.10), transparent 58%),
+      var(--ink);
+    color:var(--text);
+    font-family:"IBM Plex Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  ::selection{background:rgba(255,82,64,.35)}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:saturate(140%) blur(14px);
+    background:linear-gradient(180deg, rgba(20,18,28,.92), rgba(20,18,28,.66));
+    border-bottom:1px solid var(--line-soft);
+  }
+  .topbar-in{display:flex;align-items:center;gap:16px;height:68px}
+  .brand{display:flex;align-items:center;gap:12px;margin-right:auto;min-width:0}
+  .sigil{
+    width:38px;height:38px;border-radius:11px;flex:none;position:relative;
+    background:conic-gradient(from 210deg, var(--press), var(--press-2), #ff8c40, var(--press-2), var(--press));
+    box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 8px 22px -8px rgba(255,125,43,.6);
+    display:grid;place-items:center;
+  }
+  .sigil::after{content:"P";font-family:"Bricolage Grotesque";font-weight:800;font-size:19px;color:#1a1422;}
+  .brand h1{
+    font-family:"Bricolage Grotesque";font-weight:800;font-size:21px;letter-spacing:-.01em;margin:0;line-height:1;
+  }
+  .brand .tag{font-size:11.5px;color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+
+  .chips{display:flex;align-items:center;gap:10px}
+  .modelpill{
+    display:inline-flex;align-items:center;gap:8px;
+    height:34px;padding:0 13px;border-radius:999px;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-size:12px;color:var(--muted);font-weight:500;white-space:nowrap;cursor:default;user-select:none;
+  }
+  .modelpill .dot{width:8px;height:8px;border-radius:50%;background:var(--flag);box-shadow:0 0 8px var(--flag)}
+  .modelpill.on .dot{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+  .modelpill .mp-label{color:var(--muted-2);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+  .modelpill b{color:var(--text);font-weight:600;font-family:"IBM Plex Mono";font-size:12px}
+  .gear{
+    height:38px;padding:0 15px;border-radius:11px;display:inline-flex;align-items:center;gap:9px;
+    background:var(--text);color:#16121d;font-weight:700;font-size:13px;letter-spacing:.01em;
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .gear:hover{transform:translateY(-1px);box-shadow:0 10px 24px -12px rgba(255,255,255,.5)}
+  .gear svg{width:16px;height:16px}
+  @media(max-width:640px){
+    .modelpill .mp-label{display:none}
+    .modelpill{padding:0 11px}
+    .gear .gtxt{display:none}
+    .gear{padding:0 12px}
+    .brand .tag{display:none}
+  }
+
+  /* ---------- Mobile tap-target sizing (≤640px) ---------- */
+  @media(max-width:640px){
+    .eye{width:40px;height:40px;right:4px;top:4px}
+    .pwwrap .inp{padding-right:52px}
+    .copybtn{padding:7px 12px;min-height:36px;font-size:11.5px}
+    .btn-danger{min-height:44px}
+    .field-block label{min-height:40px}
+    .seg button{height:40px}
+    .xbtn{width:40px;height:40px}
+    .cToggle{width:32px;height:32px}
+    .laneToggle{width:32px;height:32px}
+    .console-bar{padding:13px 14px}
+  }
+
+  /* ---------- Top-level tabs ---------- */
+  .tabbar{padding:18px 0 0}
+  .tabrow{display:flex;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:14px;padding:5px}
+  .tabbtn{
+    flex:1;height:46px;border-radius:10px;font-weight:700;font-size:14px;letter-spacing:.01em;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--muted);
+    transition:background .18s ease,color .18s ease;
+  }
+  .tabbtn .tic{font-size:16px}
+  .tabbtn.active{background:var(--field);color:var(--text)}
+  .tabbtn.active.tab-memes{box-shadow:inset 0 0 0 1px rgba(255,82,64,.4)}
+  .tabbtn.active.tab-divine{box-shadow:inset 0 0 0 1px rgba(255,176,46,.4)}
+  .tabpanel{display:none}
+  .tabpanel.active{display:block}
+  @media(max-width:480px){ .tabbtn span.tlabel{font-size:13px} }
+
+  /* ---------- Console deck ---------- */
+  .deck{padding:22px 0 8px}
+  .deck-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch}
+  @media(max-width:920px){.deck-grid{grid-template-columns:1fr;gap:16px}}
+
+  .deck-head .eyebrow{font-family:"IBM Plex Mono";font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted-2);margin:0 0 12px}
+  .deck-head h2{
+    font-family:"Bricolage Grotesque";font-weight:800;font-size:clamp(26px,4.2vw,42px);line-height:1.05;letter-spacing:-.02em;margin:0 0 12px;
+  }
+  .deck-head h2 .red{color:var(--press)}
+  .deck-head h2 .gold{color:var(--divine)}
+  .deck-head p{color:var(--muted);max-width:48ch;margin:0 0 20px;font-size:14px}
+
+  .runs{display:flex;flex-wrap:wrap;gap:10px}
+  .btn{
+    height:48px;padding:0 20px;border-radius:13px;font-weight:700;font-size:14.5px;letter-spacing:.01em;
+    display:inline-flex;align-items:center;gap:10px;transition:transform .14s ease, filter .2s ease, box-shadow .2s ease;
+    border:1px solid transparent;
+  }
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-primary{
+    background:linear-gradient(110deg,var(--press),#ff8c40 70%,var(--press-2));
+    color:#1a1220;box-shadow:0 14px 30px -14px rgba(255,125,43,.75);
+  }
+  .btn-primary:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.04)}
+  .btn-divine{
+    background:linear-gradient(110deg,var(--divine),var(--divine-2) 80%);
+    color:#1a1220;box-shadow:0 14px 30px -14px rgba(255,176,46,.6);
+  }
+  .btn-divine:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.04)}
+  .btn-video{
+    background:linear-gradient(110deg,var(--video),var(--video-2) 90%);
+    color:#0f0d18;box-shadow:0 14px 30px -14px rgba(124,92,255,.6);
+  }
+  .btn-video:not(:disabled):hover{transform:translateY(-2px);filter:brightness(1.04)}
+  .btn-ghost{background:var(--panel-2);border-color:var(--line);color:var(--text)}
+  .btn-ghost:not(:disabled):hover{border-color:var(--muted-2);transform:translateY(-1px)}
+  .btn-clear{margin-left:auto}
+  @media(max-width:520px){.btn-clear{margin-left:0}}
+  .btn-danger{
+    align-self:flex-start;height:42px;padding:0 16px;border-radius:11px;
+    background:rgba(255,107,129,.08);border:1px solid rgba(255,107,129,.4);color:var(--flag);font-weight:600;font-size:13px;
+    transition:background .15s ease;
+  }
+  .btn-danger:hover{background:rgba(255,107,129,.16)}
+  .btn .spin{width:15px;height:15px;border-radius:50%;border:2px solid rgba(26,18,32,.35);border-top-color:#1a1220;animation:spin .7s linear infinite}
+  .btn-ghost .spin{border-color:rgba(255,255,255,.25);border-top-color:#fff}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* ---------- Activity console ---------- */
+  .console{
+    background:linear-gradient(180deg,#1a1726,#16131f);
+    border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;display:flex;flex-direction:column;min-height:240px;
+  }
+  .console-bar{display:flex;align-items:center;gap:8px;padding:11px 14px;border-bottom:1px solid var(--line-soft);background:rgba(255,255,255,.015);cursor:pointer;user-select:none}
+  .console-bar:hover{background:rgba(255,255,255,.03)}
+  .cToggle{flex:none;width:26px;height:26px;border-radius:7px;display:grid;place-items:center;color:var(--muted);transition:background .15s ease}
+  .cToggle:hover{background:var(--panel-2);color:var(--text)}
+  .cToggle svg{width:15px;height:15px;transition:transform .25s ease}
+  .console.collapsed{min-height:0}
+  .console.collapsed .console-bar{border-bottom:none}
+  .console.collapsed .log{display:none}
+  .console.collapsed .cToggle svg{transform:rotate(-90deg)}
+  .tl{width:10px;height:10px;border-radius:50%}
+  .tl.a{background:var(--press)} .tl.b{background:var(--press-2)} .tl.c{background:var(--ok)}
+  .console-bar .ct{font-family:"IBM Plex Mono";font-size:11.5px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-left:6px}
+  .console-bar .calls{margin-left:auto;font-family:"IBM Plex Mono";font-size:11.5px;color:var(--muted)}
+  .console-bar .calls b{color:var(--press-2)}
+  .log{flex:1;overflow-y:auto;padding:12px 14px;font-family:"IBM Plex Mono";font-size:12.5px;line-height:1.65;max-height:300px}
+  .log .ln{display:flex;gap:9px;align-items:flex-start;animation:fade .25s ease both}
+  .log .ts{color:var(--muted-2);flex:none}
+  .log .ic{flex:none;width:14px;text-align:center}
+  .log .msg{color:#cfc8dd;word-break:break-word}
+  .log .ln.press .ic{color:var(--press)}
+  .log .ln.divine .ic{color:var(--divine)}
+  .log .ln.video .ic{color:var(--video)}
+  .log .ln.ok .ic{color:var(--ok)} .log .ln.ok .msg{color:#bfeede}
+  .log .ln.err .ic{color:var(--flag)} .log .ln.err .msg{color:#ffc3cc}
+  .log .ln.warn .ic{color:var(--fix)}
+  .log .ln.sys .msg{color:var(--muted)}
+  .log .empty{color:var(--muted-2)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+  /* ---------- Lanes ---------- */
+  .lanes{display:grid;grid-template-columns:1fr;gap:20px;padding:26px 0 60px}
+  .lane-head{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+  .lane-bar{width:4px;height:30px;border-radius:4px;flex:none}
+  .lane-press .lane-bar{background:linear-gradient(var(--press),var(--press-2))}
+  .lane-divine .lane-bar{background:linear-gradient(var(--divine),var(--divine-2))}
+  .lane-video .lane-bar{background:linear-gradient(var(--video),var(--video-2))}
+  .lane-head .ic{font-size:19px}
+  .lane-head h3{font-family:"Bricolage Grotesque";font-weight:700;font-size:18px;margin:0;letter-spacing:-.01em}
+  .lane-head .sub{font-size:12px;color:var(--muted);margin-top:1px}
+  .lane-head .count{
+    font-family:"IBM Plex Mono";font-size:12px;color:var(--muted);
+    background:var(--panel-2);border:1px solid var(--line);padding:4px 10px;border-radius:999px;
+  }
+  .lane-press .count b{color:var(--press)}
+  .lane-divine .count b{color:var(--divine)}
+  .lane-video .count b{color:var(--video)}
+  .laneToggle{flex:none;width:28px;height:28px;border-radius:8px;display:grid;place-items:center;color:var(--muted);transition:background .15s ease}
+  .laneToggle:hover{background:var(--panel-2);color:var(--text)}
+  .laneToggle svg{width:15px;height:15px;transition:transform .25s ease}
+  .lane.collapsed .laneToggle svg{transform:rotate(-90deg)}
+  .lane.collapsed .cards{display:none}
+
+  .cards{display:flex;flex-direction:column;gap:14px}
+
+  .empty-state{
+    border:1.5px dashed var(--line);border-radius:var(--r-lg);padding:34px 22px;text-align:center;color:var(--muted-2);
+    background:rgba(255,255,255,.012);
+  }
+  .empty-state .big{font-size:26px;margin-bottom:8px;opacity:.7}
+  .empty-state p{margin:0;font-size:13.5px;color:var(--muted)}
+
+  .card{
+    background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;
+    box-shadow:var(--shadow);animation:cardin .4s cubic-bezier(.2,.7,.2,1) both;
+  }
+  @keyframes cardin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+  .card-top{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+  .idx{
+    font-family:"Bricolage Grotesque";font-weight:800;font-size:13px;width:30px;height:30px;border-radius:9px;
+    display:grid;place-items:center;flex:none;color:#1a1220;
+  }
+  .lane-press .idx{background:linear-gradient(135deg,var(--press),var(--press-2))}
+  .lane-divine .idx{background:linear-gradient(135deg,var(--divine),var(--divine-2))}
+  .lane-video .idx{background:linear-gradient(135deg,var(--video),var(--video-2))}
+  .card-top .ttl{font-weight:600;font-size:14px;min-width:0;flex:1 1 auto;line-height:1.4;word-break:break-word}
+  @media(max-width:480px){
+    .card-top{padding:13px 14px}
+    .card-top .ttl{flex-basis:100%;order:2}
+    .card-top .idx{order:1}
+  }
+
+  .card-body{padding:15px 16px;display:flex;flex-direction:column;gap:13px}
+  .card-meta{font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.02em;color:var(--divine);background:rgba(255,176,46,.08);border:1px solid rgba(255,176,46,.25);border-radius:8px;padding:7px 10px;line-height:1.5}
+  .lane-video .card-meta{color:var(--video);background:rgba(124,92,255,.08);border-color:rgba(124,92,255,.25)}
+  .card-sig{font-size:13px;color:var(--muted);line-height:1.55;margin:0}
+  .card-rituals{color:var(--text);opacity:.85}
+  .role-pill{font-family:"IBM Plex Mono";font-size:10px;letter-spacing:.03em;text-transform:none;background:var(--field);border:1px solid var(--line);padding:3px 9px;border-radius:999px;color:var(--divine);flex:none}
+  .lane-video .role-pill{color:var(--video)}
+  .field-block label{display:flex;align-items:center;gap:8px;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px;font-weight:600;cursor:pointer;user-select:none;min-height:32px}
+  .field-block label .pill{font-family:"IBM Plex Mono";font-size:10px;text-transform:none;letter-spacing:0;background:var(--field);padding:2px 7px;border-radius:6px;color:var(--muted)}
+  .field-block .fchev{flex:none;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;color:var(--muted-2);transition:transform .25s ease}
+  .field-block .fchev svg{width:12px;height:12px}
+  .field-block.collapsed .fchev{transform:rotate(-90deg)}
+  .field-block.collapsed .prompt-box,
+  .field-block.collapsed .caption-box{display:none}
+  .copybtn{
+    margin-left:auto;font-size:11px;font-weight:600;color:var(--muted);
+    border:1px solid var(--line);border-radius:8px;padding:4px 10px;display:inline-flex;gap:6px;align-items:center;
+    transition:.15s ease;letter-spacing:.02em;
+  }
+  .copybtn:hover{color:var(--text);border-color:var(--muted-2)}
+  .copybtn.done{color:var(--ok);border-color:rgba(67,217,163,.4)}
+  .prompt-box{
+    font-family:"IBM Plex Mono";font-size:12.5px;line-height:1.65;color:#d6cfe4;
+    background:var(--panel-2);border:1px solid var(--line-soft);border-radius:var(--r-md);
+    padding:13px 14px;white-space:pre-wrap;word-break:break-word;max-height:280px;overflow:auto;
+  }
+  .caption-box{
+    font-size:13.5px;line-height:1.6;color:var(--text);background:rgba(255,255,255,.025);
+    border:1px solid var(--line-soft);border-radius:var(--r-md);padding:12px 14px;white-space:pre-wrap;
+  }
+
+  .skel{height:150px;border-radius:var(--r-lg);background:linear-gradient(100deg,var(--panel) 30%,var(--panel-2) 50%,var(--panel) 70%);background-size:200% 100%;animation:shine 1.3s linear infinite;border:1px solid var(--line)}
+  @keyframes shine{to{background-position:-200% 0}}
+
+  /* ---------- Settings drawer ---------- */
+  .scrim{position:fixed;inset:0;background:rgba(8,6,12,.6);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .25s ease;z-index:50}
+  .scrim.open{opacity:1;pointer-events:auto}
+  .drawer{
+    position:fixed;top:0;right:0;height:100dvh;width:min(440px,100%);z-index:60;
+    background:var(--panel);border-left:1px solid var(--line);
+    transform:translateX(100%);transition:transform .32s cubic-bezier(.3,.8,.2,1);
+    display:flex;flex-direction:column;box-shadow:-30px 0 70px -30px rgba(0,0,0,.7);
+  }
+  .drawer.open{transform:none}
+  .drawer-head{display:flex;align-items:center;gap:12px;padding:18px 20px;border-bottom:1px solid var(--line-soft)}
+  .drawer-head h3{font-family:"Bricolage Grotesque";font-weight:700;font-size:17px;margin:0}
+  .drawer-head p{font-size:11.5px;color:var(--muted);margin:2px 0 0}
+  .xbtn{margin-left:auto;width:34px;height:34px;border-radius:9px;background:var(--panel-2);border:1px solid var(--line);display:grid;place-items:center;color:var(--muted)}
+  .xbtn:hover{color:var(--text)}
+  .drawer-body{padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:14px}
+  .group{display:flex;flex-direction:column;gap:13px;border:1px solid var(--line-soft);border-radius:var(--r-md);padding:4px 10px 0}
+  .group.collapsed{padding-bottom:4px}
+  .group-title{
+    font-family:"IBM Plex Mono";font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted-2);
+    display:flex;align-items:center;gap:9px;cursor:pointer;user-select:none;
+    min-height:44px;margin:0 -10px;padding:0 10px;border-radius:var(--r-sm);background:none;border:none;width:calc(100% + 20px);
+    font-weight:inherit;text-align:left;transition:background .15s ease;
+  }
+  .group-title:hover{background:rgba(255,255,255,.03)}
+  .group-title::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+  .group-title.press{color:var(--press)}
+  .group-title.divine{color:var(--divine)}
+  .group-title .gchev{flex:none;width:22px;height:22px;border-radius:6px;display:grid;place-items:center;color:var(--muted);transition:transform .25s ease, background .15s ease;margin-left:auto}
+  .group-title:hover .gchev{background:var(--panel-2);color:var(--text)}
+  .group-title .gchev svg{width:13px;height:13px}
+  .group.collapsed .gchev{transform:rotate(-90deg)}
+  .group-content{display:flex;flex-direction:column;gap:13px;padding-bottom:14px;overflow:hidden}
+  .group.collapsed .group-content{display:none}
+
+  .fld{display:flex;flex-direction:column;gap:6px}
+  .fld label{font-size:12.5px;font-weight:600;color:var(--text);display:flex;align-items:center;gap:8px}
+  .fld .hint{font-size:11.5px;color:var(--muted);font-weight:400}
+  .fld .hint a{color:var(--press);text-decoration:none;border-bottom:1px solid rgba(255,82,64,.4)}
+  .inp,.sel{
+    width:100%;height:44px;border-radius:11px;background:var(--field);border:1px solid var(--line);
+    color:var(--text);padding:0 13px;font-size:13.5px;font-family:"IBM Plex Mono";outline:none;transition:border-color .15s ease,box-shadow .15s ease;
+  }
+  .sel{font-family:"IBM Plex Sans";appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239a92ac' d='M6 8L2 4h8z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:34px}
+  .inp:focus,.sel:focus{border-color:var(--press);box-shadow:0 0 0 3px rgba(255,82,64,.14)}
+  .pwwrap{position:relative}
+  .pwwrap .inp{padding-right:46px}
+  .eye{position:absolute;right:6px;top:6px;width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:var(--muted)}
+  .eye:hover{color:var(--text)}
+
+  .seg{display:flex;background:var(--field);border:1px solid var(--line);border-radius:11px;padding:4px;gap:4px}
+  .seg button{flex:1;height:34px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);transition:.15s ease}
+  .seg button.active{background:var(--press);color:#1a1220}
+
+  .save-row{padding:16px 20px;border-top:1px solid var(--line-soft);display:flex;gap:10px;align-items:center}
+  .save-note{font-size:11px;color:var(--muted-2);display:flex;align-items:center;gap:7px;margin-right:auto}
+  .save-note svg{width:13px;height:13px;flex:none}
+  .btn-save{height:42px;padding:0 22px;border-radius:11px;background:var(--text);color:#16121d;font-weight:700;font-size:13.5px}
+  .btn-save:hover{filter:brightness(.95)}
+
+  .toast{
+    position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);z-index:80;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:11px 18px;font-size:13px;font-weight:500;
+    box-shadow:var(--shadow);opacity:0;transition:.25s ease;pointer-events:none;max-width:90vw;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .toast.ok{border-color:rgba(67,217,163,.5)} .toast.err{border-color:rgba(255,107,129,.5)}
+
+  .file-warning{
+    display:none;position:fixed;inset:0;z-index:90;background:rgba(10,9,14,.7);
+    align-items:center;justify-content:center;padding:20px;
+  }
+  .file-warning.show{display:flex}
+  .file-warning-card{
+    max-width:480px;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:var(--r-lg);
+    box-shadow:var(--shadow);padding:24px;position:relative;
+  }
+  .file-warning-card h3{margin:0 0 10px;font-family:"Bricolage Grotesque";font-size:18px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:9px}
+  .file-warning-card p{margin:0 0 10px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+  .file-warning-card p b{color:var(--text)}
+  .file-warning-card ol{margin:0 0 14px;padding-left:20px;font-size:13.5px;line-height:1.6;color:var(--muted)}
+  .file-warning-card ol li{margin-bottom:6px}
+  .file-warning-card code{font-family:"IBM Plex Mono";font-size:12px;background:var(--field);padding:2px 6px;border-radius:5px;color:var(--text)}
+  .file-warning-close{
+    height:40px;padding:0 18px;border-radius:11px;background:var(--text);color:#16121d;font-weight:700;font-size:13.5px;width:100%;
+  }
+  .file-warning-close:hover{filter:brightness(.95)}
+
+  footer{padding:26px 0 40px;border-top:1px solid var(--line-soft);color:var(--muted-2);font-size:12px;text-align:center}
+  footer b{color:var(--muted)}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;transition-duration:.05ms !important}
+  }
+  :focus-visible{outline:2px solid var(--press);outline-offset:2px;border-radius:6px}
+</style>
+</head>
+<body>
+
+<!-- ========== TOP BAR ========== -->
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <div class="brand">
+      <div class="sigil" aria-hidden="true"></div>
+      <div>
+        <h1>PromptLab <span style="color:var(--muted);font-weight:500;font-size:13px">studios</span></h1>
+        <div class="tag">prompt &amp; caption lab</div>
+      </div>
+    </div>
+    <div class="chips">
+      <span class="modelpill" id="modelPill" title="Selected Gemini model (change in Settings)">
+        <span class="dot" id="gemDot"></span>
+        <span class="mp-label">Gemini</span><b id="chipModel">—</b>
+      </span>
+      <button class="gear" id="openSettingsBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span class="gtxt">Settings</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== TOP-LEVEL TABS ========== -->
+<section class="wrap tabbar">
+  <div class="tabrow">
+    <button class="tabbtn tab-memes active" id="tabBtn-memes" data-tab="memes">
+      <span class="tic">🗞️</span><span class="tlabel">Memes</span>
+    </button>
+    <button class="tabbtn tab-divine" id="tabBtn-divine" data-tab="divine">
+      <span class="tic">🕉️</span><span class="tlabel">Vedic Engine</span>
+    </button>
+  </div>
+</section>
+
+<!-- ========== MEMES TAB PANEL ========== -->
+<div class="tabpanel active" id="panel-memes">
+
+  <section class="wrap deck">
+    <div class="deck-grid">
+      <div class="deck-head">
+        <p class="eyebrow">prompt &amp; caption studio</p>
+        <h2>Meme <span class="red">Prompt</span>.<br>Copy &amp; paste anywhere.</h2>
+        <p>One crew of agents turns live Karnataka news into meme prompts — auto-picking the sharpest meme style for each story.</p>
+        <div class="runs">
+          <button class="btn btn-primary" id="runMemes">
+            <span class="bi">🗞️</span><span class="bt">Run Memes Crew</span>
+          </button>
+          <button class="btn btn-ghost btn-clear" id="clearBtn-memes" title="Clear logs, results &amp; counters"><span class="bi">🧹</span><span class="bt">Clear</span></button>
+        </div>
+      </div>
+
+      <div class="console" id="console-memes">
+        <div class="console-bar" data-console="memes">
+          <span class="tl a"></span><span class="tl b"></span><span class="tl c"></span>
+          <span class="ct">activity console</span>
+          <span class="calls">api calls · <b id="callCount">0</b></span>
+          <button class="cToggle" id="cToggle-memes" aria-label="Collapse console" aria-expanded="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="log" id="log-memes">
+          <div class="empty">// idle — set your Gemini key in Settings, then run the crew.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="lanes">
+      <div class="lane lane-press" id="lane-press">
+        <div class="lane-head">
+          <span class="lane-bar"></span>
+          <span class="ic">🗞️</span>
+          <div>
+            <h3>Karnataka Meme Crew</h3>
+            <div class="sub">grounded · live news · 1:1 image prompts</div>
+          </div>
+          <span class="count" style="margin-left:auto"><b id="countPress">0</b>/3</span>
+          <button class="laneToggle" id="laneToggle-press" data-lane="press" aria-label="Collapse lane" aria-expanded="true" title="Hide/show this lane">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="cards" id="cardsPress">
+          <div class="empty-state">
+            <div class="big">🗞️</div>
+            <p>No memes yet. Run the crew to pull live Karnataka headlines and craft 3 meme prompts + captions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<!-- ========== DIVINE ENERGY TAB PANEL ========== -->
+<div class="tabpanel" id="panel-divine">
+
+  <section class="wrap deck">
+    <div class="deck-grid">
+      <div class="deck-head">
+        <p class="eyebrow">vedic content generation engine</p>
+        <h2>Vedic <span class="gold">Energy</span>.<br>Image &amp; video agents.</h2>
+        <p>Live Panchang (Prokerala) + grounded research → today's top Vedic event, turned into cinematic image &amp; video prompts.</p>
+        <div class="runs">
+          <button class="btn btn-divine" id="runImage">
+            <span class="bi">🕉️</span><span class="bt">Run Vedic Image Agent</span>
+          </button>
+          <button class="btn btn-video" id="runVideo">
+            <span class="bi">🎞️</span><span class="bt">Run Vedic Video Agent</span>
+          </button>
+          <button class="btn btn-ghost btn-clear" id="clearBtn-divine" title="Clear logs, results &amp; counters"><span class="bi">🧹</span><span class="bt">Clear</span></button>
+        </div>
+      </div>
+
+      <div class="console" id="console-divine">
+        <div class="console-bar" data-console="divine">
+          <span class="tl a"></span><span class="tl b"></span><span class="tl c"></span>
+          <span class="ct">activity console</span>
+          <span class="calls">api calls · <b id="callCount2">0</b></span>
+          <button class="cToggle" id="cToggle-divine" aria-label="Collapse console" aria-expanded="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="log" id="log-divine">
+          <div class="empty">// idle — set your Gemini key (and optionally Panchang API keys) in Settings, then run an agent.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <div class="lanes">
+      <div class="lane lane-divine" id="lane-divine">
+        <div class="lane-head">
+          <span class="lane-bar"></span>
+          <span class="ic">🕉️</span>
+          <div>
+            <h3>Vedic Image Agent</h3>
+            <div class="sub">live Panchang · 2 info cards + 1 scene · 1:1 image prompts</div>
+          </div>
+          <span class="count" style="margin-left:auto"><b id="countDivine">0</b>/3</span>
+          <button class="laneToggle" id="laneToggle-divine" data-lane="divine" aria-label="Collapse lane" aria-expanded="true" title="Hide/show this lane">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="cards" id="cardsDivine">
+          <div class="empty-state">
+            <div class="big">🕉️</div>
+            <p>No prompts yet. Run the Vedic Image Agent — picks today's top Panchang event and crafts 2 event-details cards + 1 devotional scene.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="lane lane-video" id="lane-video">
+        <div class="lane-head">
+          <span class="lane-bar"></span>
+          <span class="ic">🎞️</span>
+          <div>
+            <h3>Vedic Video Agent</h3>
+            <div class="sub">live Panchang · Hook/Value cards + CTA scene · 9:16 · 10s each</div>
+          </div>
+          <span class="count" style="margin-left:auto"><b id="countVideo">0</b>/3</span>
+          <button class="laneToggle" id="laneToggle-video" data-lane="video" aria-label="Collapse lane" aria-expanded="true" title="Hide/show this lane">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="cards" id="cardsVideo">
+          <div class="empty-state">
+            <div class="big">🎞️</div>
+            <p>No prompts yet. Run the Vedic Video Agent for one event told across Hook (info card) → Value (info card) → CTA (devotional scene).</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="wrap">
+  <b>PromptLab Studios</b> · generates prompts only (paste into your image/video tool of choice) · everything runs in your browser
+</footer>
+
+<!-- ========== SETTINGS DRAWER ========== -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-label="Settings">
+  <div class="drawer-head">
+    <div>
+      <h3>Settings</h3>
+      <p>Shared key &amp; run options</p>
+    </div>
+    <button class="xbtn" id="closeSettingsBtn" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+    <!-- Gemini -->
+    <div class="group" id="grp-gemini" data-group="gemini">
+      <button class="group-title" data-group="gemini" aria-expanded="false">Brain · Gemini<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <label>Gemini API key <span class="hint" style="margin-left:auto">shared by both tabs</span></label>
+        <div class="hint">Free key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">aistudio.google.com ↗</a></div>
+        <div class="pwwrap">
+          <input class="inp" id="setGem" type="password" placeholder="AIza…" autocomplete="off" spellcheck="false">
+          <button class="eye" id="toggleGemPw" aria-label="Show key">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="fld">
+        <label>Generation model</label>
+        <select class="sel" id="setModel">
+          <option value="gemini-2.5-flash">gemini-2.5-flash (recommended · ~250–1,500/day free)</option>
+          <option value="gemini-2.5-flash-lite">gemini-2.5-flash-lite (highest free quota · ~1,000/day)</option>
+          <option value="gemini-2.0-flash">gemini-2.0-flash (fast · 1M TPM)</option>
+          <option value="gemini-2.5-pro">gemini-2.5-pro (paid key only — free tier ≈ 0/day)</option>
+        </select>
+        <div class="hint">⚠ On a free key, stick to a <b>Flash</b> model or you'll hit 429 almost immediately. Same key/quota powers both tabs.</div>
+      </div>
+      <div class="fld">
+        <label>Live search <span class="hint" style="margin-left:auto">shared · both tabs</span></label>
+        <div class="seg" id="segSearch">
+          <button data-v="1" class="active">On (grounded)</button>
+          <button data-v="0">Off (saves quota)</button>
+        </div>
+        <div class="hint">Memes use it for live headlines; the Vedic Engine uses it to research event significance (and as a fallback if the Panchang API is unavailable). Turn off to conserve quota.</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Panchang data -->
+    <div class="group" id="grp-panchang" data-group="panchang">
+      <button class="group-title" data-group="panchang" aria-expanded="false">Panchang data · Prokerala<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <div class="hint">Live Tithi/Nakshatra data (Bengaluru, Karnataka) is fetched server-side once a day by a GitHub Action and published as <code style="font-family:'IBM Plex Mono';font-size:12px;background:var(--field);padding:1px 5px;border-radius:5px">panchang.json</code> alongside this app — no API key needed here. Prokerala's API can't be called directly from a browser, which is why this runs as a scheduled job rather than a live request. If that file is missing or stale (e.g. the Action hasn't run yet, or its repo secrets aren't set), the Vedic Engine falls back to Gemini's own Google Search grounding automatically.</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Region -->
+    <div class="group" id="grp-memestyle" data-group="memestyle">
+      <button class="group-title press" data-group="memestyle" aria-expanded="false">Memes · Region 🗞️<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <label>Region</label>
+        <input class="inp" id="setRegion" type="text" value="Karnataka" autocomplete="off" spellcheck="false">
+        <div class="hint">Used to find what's trending — memes are generated for this region's politics.</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Run options (Memes) -->
+    <div class="group" id="grp-runopts" data-group="runopts">
+      <button class="group-title press" data-group="runopts" aria-expanded="false">Memes · News window 🗞️<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <label>News window <span class="hint" style="margin-left:auto">IST · looks back</span></label>
+        <div class="seg" id="segWindow">
+          <button data-v="24" class="active">Last 24 hrs</button>
+          <button data-v="48">Last 48 hrs</button>
+        </div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Run options (Vedic Engine) -->
+    <div class="group" id="grp-vedicopts" data-group="vedicopts">
+      <button class="group-title" data-group="vedicopts" aria-expanded="false" style="color:var(--divine)">Vedic Engine · Event lookahead 🕉️<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <label>Event lookahead <span class="hint" style="margin-left:auto">IST · looks forward</span></label>
+        <div class="seg" id="segLookahead">
+          <button data-v="72" class="active">Next 72 hrs</button>
+          <button data-v="168">Next 7 days</button>
+        </div>
+        <div class="hint">Top 1 upcoming event within 72 hrs preferred; widen to 7 days if nothing stands out. Used by both Vedic agents.</div>
+      </div>
+      </div>
+    </div>
+
+    <!-- Danger zone -->
+    <div class="group" id="grp-danger" data-group="danger">
+      <button class="group-title" data-group="danger" aria-expanded="false" style="color:var(--flag)">Danger zone<span class="gchev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="group-content">
+      <div class="fld">
+        <label>Erase saved data</label>
+        <div class="hint">Removes your saved Gemini key and all preferences from this browser, and clears the current results &amp; logs.</div>
+        <button class="btn-danger" id="eraseAllBtn">Erase saved key &amp; preferences</button>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="save-row">
+    <span class="save-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      These stay in your browser
+    </span>
+    <button class="btn-save" id="saveSettingsBtn">Save</button>
+  </div>
+</aside>
+
+<div class="toast" id="toast"></div>
+
+<div class="file-warning" id="fileWarning">
+  <div class="file-warning-card">
+    <h3>⚠️ This page won't work as a local file</h3>
+    <p>You're opening this app via <code>file://</code> (e.g. double-clicked, AirDropped, or opened from Files). Browsers block requests to Gemini and the Panchang API from <code>file://</code> pages for security — every "Run" button will fail after a long retry, no matter how this file is set up.</p>
+    <p><b>Fix it with one of these:</b></p>
+    <ol>
+      <li>Host this file online (GitHub Pages, Netlify, Vercel, or any web host) and open that web address instead.</li>
+      <li>Or, on a computer, run a quick local server in the file's folder — e.g. <code>python3 -m http.server 8000</code> — then open <code>http://localhost:8000/…</code> (or your computer's LAN address from a phone on the same Wi-Fi).</li>
+    </ol>
+    <button class="file-warning-close" id="fileWarningClose">Got it</button>
+  </div>
+</div>
+
+<script type="module">
+const LS = "doota_settings_v1";
+const cfg = {
+  gem:"", model:"gemini-2.5-flash",
+  window:24, useSearch:1,
+  region:"Karnataka",
+  lookahead:72
+};
+let apiCalls = 0;
+let busyPress = false, busyDivine = false, busyVideo = false;
+const data = { press:[], divine:[], video:[] };
+
+function loadSettings(){
+  try{ Object.assign(cfg, JSON.parse(localStorage.getItem(LS) || "{}")); }catch(e){}
+  document.getElementById("setGem").value = cfg.gem || "";
+  document.getElementById("setModel").value = cfg.model;
+  document.getElementById("setRegion").value = cfg.region;
+  document.querySelectorAll("#segWindow button").forEach(b=>{
+    b.classList.toggle("active", Number(b.dataset.v)===Number(cfg.window));
+  });
+  document.querySelectorAll("#segLookahead button").forEach(b=>{
+    b.classList.toggle("active", Number(b.dataset.v)===Number(cfg.lookahead));
+  });
+  document.querySelectorAll("#segSearch button").forEach(b=>{
+    b.classList.toggle("active", Number(b.dataset.v)===Number(cfg.useSearch));
+  });
+  setModelUI();
+  refreshChips();
+}
+function saveSettings(){
+  cfg.gem = document.getElementById("setGem").value.trim();
+  cfg.model = document.getElementById("setModel").value;
+  cfg.region = document.getElementById("setRegion").value.trim() || "Karnataka";
+  localStorage.setItem(LS, JSON.stringify(cfg));
+  refreshChips(); setModelUI();
+  toast("Settings saved", "ok");
+  closeSettings();
+}
+function setModelUI(){ document.getElementById("chipModel").textContent = cfg.model.replace("gemini-",""); }
+function refreshChips(){
+  document.getElementById("modelPill").classList.toggle("on", !!cfg.gem);
+}
+function setWindow(v,btn){ cfg.window=v; document.querySelectorAll("#segWindow button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+function setLookahead(v,btn){ cfg.lookahead=v; document.querySelectorAll("#segLookahead button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+function setSearch(v,btn){ cfg.useSearch=v; document.querySelectorAll("#segSearch button").forEach(b=>b.classList.remove("active")); btn.classList.add("active"); }
+
+/* ============================================================
+   TOP-LEVEL TABS
+   ============================================================ */
+const LS_TAB = "promptlab_active_tab";
+function switchTab(name){
+  document.querySelectorAll(".tabpanel").forEach(p=>p.classList.remove("active"));
+  document.querySelectorAll(".tabbtn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("panel-"+name).classList.add("active");
+  document.getElementById("tabBtn-"+name).classList.add("active");
+  try{ localStorage.setItem(LS_TAB, name); }catch(e){}
+}
+function initTab(){
+  let name = "memes";
+  try{ name = localStorage.getItem(LS_TAB) || "memes"; }catch(e){}
+  switchTab(name);
+}
+
+/* ============================================================
+   SETTINGS DRAWER
+   ============================================================ */
+function openSettings(){ document.getElementById("scrim").classList.add("open"); document.getElementById("drawer").classList.add("open"); }
+function closeSettings(){ document.getElementById("scrim").classList.remove("open"); document.getElementById("drawer").classList.remove("open"); }
+function togglePw(id,btn){ const el=document.getElementById(id); el.type = el.type==="password"?"text":"password"; btn.style.color = el.type==="text"?"var(--text)":"var(--muted)"; }
+
+/* ---- collapsible settings groups ---- */
+const LS_GROUPS = "promptlab_settings_groups";
+const ALL_GROUPS = ["gemini","panchang","memestyle","runopts","vedicopts","danger"];
+function getGroupState(){
+  try{ return JSON.parse(localStorage.getItem(LS_GROUPS) || "{}"); }catch(e){ return {}; }
+}
+function toggleGroup(name){
+  const grp = document.getElementById("grp-"+name);
+  const collapsed = grp.classList.toggle("collapsed");
+  grp.querySelector(".group-title").setAttribute("aria-expanded", String(!collapsed));
+  const state = getGroupState();
+  state[name] = collapsed;
+  try{ localStorage.setItem(LS_GROUPS, JSON.stringify(state)); }catch(e){}
+}
+function initGroupStates(){
+  const state = getGroupState();
+  ALL_GROUPS.forEach(name=>{
+    const grp = document.getElementById("grp-"+name);
+    if(!grp) return;
+    const collapsed = (name in state) ? state[name] : true;
+    grp.classList.toggle("collapsed", collapsed);
+    grp.querySelector(".group-title").setAttribute("aria-expanded", String(!collapsed));
+  });
+}
+
+/* ---- collapsible consoles (one per tab) ---- */
+const LS_CONSOLE = "promptlab_console_collapsed_v2"; // {memes:bool, divine:bool}
+function toggleConsole(tabName){
+  const c = document.getElementById("console-"+tabName);
+  const collapsed = c.classList.toggle("collapsed");
+  document.getElementById("cToggle-"+tabName).setAttribute("aria-expanded", String(!collapsed));
+  const state = readJSON(LS_CONSOLE, {});
+  state[tabName] = collapsed;
+  writeJSON(LS_CONSOLE, state);
+}
+function initConsoleState(){
+  const state = readJSON(LS_CONSOLE, {});
+  const mobileDefault = window.innerWidth<=640;
+  ["memes","divine"].forEach(tabName=>{
+    const collapsed = (tabName in state) ? state[tabName] : mobileDefault;
+    if(collapsed){
+      document.getElementById("console-"+tabName).classList.add("collapsed");
+      document.getElementById("cToggle-"+tabName).setAttribute("aria-expanded","false");
+    }
+  });
+}
+
+/* ---- collapsible lanes (Divine Energy: Image / Video) ---- */
+const LS_LANE = "promptlab_lane_collapsed";
+function toggleLane(kind){
+  const lane = document.getElementById("lane-"+kind);
+  const collapsed = lane.classList.toggle("collapsed");
+  document.getElementById("laneToggle-"+kind).setAttribute("aria-expanded", String(!collapsed));
+  const state = readJSON(LS_LANE, {});
+  state[kind] = collapsed;
+  writeJSON(LS_LANE, state);
+}
+function initLaneStates(){
+  const state = readJSON(LS_LANE, {});
+  ["press","divine","video"].forEach(kind=>{
+    const lane = document.getElementById("lane-"+kind);
+    if(!lane) return;
+    const collapsed = !!state[kind];
+    lane.classList.toggle("collapsed", collapsed);
+    const t = document.getElementById("laneToggle-"+kind);
+    if(t) t.setAttribute("aria-expanded", String(!collapsed));
+  });
+}
+
+function readJSON(key, fallback){
+  try{ const v = JSON.parse(localStorage.getItem(key)); return (v && typeof v==="object") ? v : fallback; }catch(e){ return fallback; }
+}
+function writeJSON(key, obj){ try{ localStorage.setItem(key, JSON.stringify(obj)); }catch(e){} }
+
+/* ============================================================
+   CONSOLE LOG (per tab; Divine + Video share the "divine" console)
+   ============================================================ */
+let logClearedMemes = false, logClearedDivine = false;
+let lastLogTab = "memes";
+// `kind` is either a lane id (press/divine/video) that also picks the target console,
+// or a status kind (sys/ok/err/warn) that logs to whichever tab last logged a lane line.
+function log(msg, kind="sys", icon){
+  const targetTab = (kind==="video"||kind==="divine") ? "divine" : (kind==="press" ? "memes" : lastLogTab);
+  lastLogTab = targetTab;
+  const logEl = document.getElementById(targetTab==="divine" ? "log-divine" : "log-memes");
+  if(targetTab==="divine"){ if(!logClearedDivine){ logEl.innerHTML=""; logClearedDivine=true; } }
+  else { if(!logClearedMemes){ logEl.innerHTML=""; logClearedMemes=true; } }
+  const icons = {sys:"›", press:"🗞", divine:"🕉", video:"🎞", ok:"✓", err:"✕", warn:"!"};
+  const ts = new Date().toLocaleTimeString("en-GB",{hour12:false});
+  const ln = document.createElement("div");
+  ln.className = "ln "+kind;
+  ln.innerHTML = `<span class="ts">${ts}</span><span class="ic">${icon||icons[kind]||"›"}</span><span class="msg"></span>`;
+  ln.querySelector(".msg").textContent = msg;
+  logEl.appendChild(ln);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+function bumpCalls(){
+  apiCalls++;
+  document.getElementById("callCount").textContent = apiCalls;
+  document.getElementById("callCount2").textContent = apiCalls;
+}
+
+/* ============================================================
+   TOAST
+   ============================================================ */
+let toastT;
+function toast(msg, kind=""){
+  const t=document.getElementById("toast");
+  t.textContent=msg; t.className="toast show "+kind;
+  clearTimeout(toastT); toastT=setTimeout(()=>t.className="toast "+kind, 2600);
+}
+
+/* ============================================================
+   GEMINI + JSON HELPERS
+   ============================================================ */
+let _lastGemStart = 0;
+const MIN_GAP_MS = 4500;
+const BACKOFFS = [18000, 32000, 50000];
+const FALLBACK_MODEL = "gemini-2.5-flash-lite";
+async function throttleGate(){
+  const wait = _lastGemStart + MIN_GAP_MS - Date.now();
+  if(wait > 0) await sleep(wait);
+  _lastGemStart = Date.now();
+}
+
+async function callGemini(prompt, useSearch, modelOverride){
+  bumpCalls();
+  const primary = modelOverride || cfg.model;
+  try{
+    return await rawGemini(prompt, useSearch, primary);
+  }catch(err){
+    if(err && err.isRateLimit && primary !== FALLBACK_MODEL){
+      log(`${primary} is rate-limited — falling back to ${FALLBACK_MODEL} for this call…`, "warn");
+      return await rawGemini(prompt, useSearch, FALLBACK_MODEL);
+    }
+    throw err;
+  }
+}
+
+async function rawGemini(prompt, useSearch, model){
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(cfg.gem)}`;
+  const body = {
+    contents:[{ role:"user", parts:[{ text:prompt }] }],
+    generationConfig:{ temperature: useSearch?0.85:1.0, maxOutputTokens:8192, topP:0.95 }
+  };
+  if(useSearch){
+    body.tools = [{ google_search:{} }];
+  } else {
+    body.generationConfig.responseMimeType = "application/json";
+  }
+
+  const maxRetries = BACKOFFS.length;
+  for(let attempt=0; ; attempt++){
+    await throttleGate();
+    let res;
+    try{
+      res = await fetch(url,{ method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body) });
+    }catch(netErr){
+      if(attempt < maxRetries){
+        const w = BACKOFFS[attempt];
+        log(`Network hiccup reaching Gemini — retrying in ${Math.round(w/1000)}s (try ${attempt+1}/${maxRetries})…`, "warn");
+        await sleep(w); continue;
+      }
+      throw new Error("Network error reaching Gemini — check your connection.");
+    }
+
+    if(res.ok){
+      const j = await res.json();
+      const blockReason = j.promptFeedback?.blockReason;
+      if(blockReason && blockReason !== "BLOCK_REASON_UNSPECIFIED"){
+        throw new Error("Gemini blocked the prompt (" + blockReason + "). Turn off live search or rephrase the topic.");
+      }
+
+      const cand = j.candidates?.[0];
+      const reason = cand?.finishReason || "";
+
+      const retryableFinish = ["RECITATION","OTHER","FINISH_REASON_UNSPECIFIED",""].includes(reason) && !cand?.content;
+      if(retryableFinish && attempt < maxRetries){
+        const w = BACKOFFS[attempt];
+        log(`Gemini returned empty (finishReason: ${reason||"none"}) — retrying in ${Math.round(w/1000)}s (try ${attempt+1}/${maxRetries})…`, "warn");
+        await sleep(w); continue;
+      }
+
+      if(reason==="SAFETY") throw new Error("Gemini blocked this for safety — try again or rephrase the topic.");
+      if(reason==="MAX_TOKENS"){
+        if(attempt < maxRetries){
+          const w = BACKOFFS[attempt];
+          log(`Output was cut off (MAX_TOKENS) — raising limit and retrying in ${Math.round(w/1000)}s (try ${attempt+1}/${maxRetries})…`, "warn");
+          body.generationConfig.maxOutputTokens = 65536;
+          await sleep(w); continue;
+        }
+      }
+
+      const text = (cand?.content?.parts||[]).map(p=>p.text||"").join("");
+      if(!text.trim()){
+        throw new Error("Gemini returned an empty response after all retries. Try again or switch to a different model in Settings.");
+      }
+      return text;
+    }
+
+    let raw=""; try{ raw = await res.text(); }catch(e){}
+    let detail="", retryMs=0;
+    try{
+      const j = JSON.parse(raw);
+      detail = j.error?.message || "";
+      const ri = (j.error?.details||[]).find(d=>/RetryInfo/i.test(d["@type"]||""));
+      if(ri?.retryDelay){ const s=parseFloat(ri.retryDelay); if(!isNaN(s)) retryMs = s*1000; }
+    }catch(e){ detail = raw; }
+
+    const retryable = (res.status===429 || res.status===500 || res.status===503);
+    if(retryable && attempt < maxRetries){
+      const w = Math.max(retryMs, BACKOFFS[attempt]);
+      log(`${model} ${res.status===429?"rate limit":"busy ("+res.status+")"} — pausing ${Math.round(w/1000)}s, then retry ${attempt+1}/${maxRetries}…`, "warn");
+      await sleep(w); continue;
+    }
+
+    if(res.status===400 && /API key/i.test(detail)) throw new Error("Invalid Gemini API key.");
+    if(res.status===429){
+      const e = new Error(`${model} rate limit reached after retries — likely the daily cap. Switch to a Flash model or use another key.`);
+      e.isRateLimit = true; throw e;
+    }
+    throw new Error(`Gemini ${res.status}: ${(detail||"request failed").slice(0,160)}`);
+  }
+}
+/* ============================================================
+   PROMPT BUILDERS — MEMES
+   ============================================================ */
+function pressGenPrompt(){
+  const today = new Date().toLocaleDateString("en-IN",{weekday:"long",year:"numeric",month:"long",day:"numeric",timeZone:"Asia/Kolkata"});
+  return `You are a 3-agent ${esc(cfg.region)} POLITICAL MEME crew. Today is ${today} (IST).
+
+FIXED INPUT VARIABLE: Region: ${esc(cfg.region)}
+
+STEP 1 — GROUND IT: Use Google Search to find what is genuinely trending in ${esc(cfg.region).toUpperCase()} politics in the LAST ${cfg.window} HOURS (Indian Standard Time). Read each story's HEADLINE and a short SUMMARY before deciding. Use only real, current moments.
+
+STEP 2 — Produce EXACTLY 3 distinct meme concepts. For each, run these agents:
+1) MOMENT HUNTER — pick the EXACT news moment (a specific quote, facial expression, awkward reaction, or U-turn) — never a vague topic like "elections".
+2) ANGLE FINDER — the comedic angle: irony (said X, did Y), hypocrisy, overpromising, or public frustration.
+3) SENTIMENT MINER + CAPTION STYLIST — a short on-image tagline/punchline in the voice of the public / top comments, and a witty, self-contained caption, highly relatable to public sentiment.
+
+VIRALITY RULES (apply to every concept): 3-second clarity (instant understanding), minimal text/maximum impact, strong exaggeration + irony, highly relatable to public sentiment, lean on trending context wherever possible.
+
+OUTPUT RULES:
+- "headline": the REAL news headline (concise, factual, as reported).
+- "summary": a clear 1–2 sentence plain-English recap of what actually happened — neutral and factual, so anyone instantly gets the context.
+- "image_prompt": MUST be EXACTLY this concatenation, nothing else added: "Generate an 4K, Meme Style Image, 1:1 ratio, " + the tagline/punchline + ", " + the news summary.
+- "punchline": the on-image tagline (3–8 words), or "" if the image needs no text.
+- "caption": a CLEAR, self-contained witty/satirical social caption (a full sentence, NOT cryptic fragments) that names the real event/leader so it makes sense on its own. Light emojis. End with EXACTLY 4 relevant hashtags.
+
+JSON VALIDITY: if any field's text includes a quoted phrase (e.g. someone's exact quote), you MUST escape the double-quote characters inside it with a backslash (\\") so the JSON stays valid — never leave a raw, unescaped " inside a string value.
+
+Return ONLY a JSON array of 3 objects (no markdown, no commentary) with keys:
+"headline","summary","image_prompt","punchline","caption".`;
+}
+
+/* ============================================================
+   PANCHANG DATA — static panchang.json (live Tithi/Nakshatra
+   ground truth), refreshed daily by a GitHub Action.
+   ------------------------------------------------------------
+   Prokerala's API has no CORS support for direct browser calls, so it
+   cannot be called from this page no matter what origin it's served
+   from. Instead, a scheduled GitHub Action calls Prokerala server-side
+   once a day and commits the result to panchang.json at the repo root.
+   This app just reads that file with a same-origin fetch — no CORS
+   issue at all, since it's part of the same site. If the file is
+   missing, stale, or empty (e.g. the Action hasn't run yet), this
+   falls back silently to Gemini's own Google Search grounding.
+   ============================================================ */
+let _panchangCache = null;
+
+async function fetchPanchangWindow(kind){
+  if(_panchangCache !== null) return _panchangCache.length ? _panchangCache : null;
+  try{
+    const res = await fetch("./panchang.json", { cache:"no-store" });
+    if(!res.ok) throw new Error(`panchang.json request failed (${res.status})`);
+    const j = await res.json();
+    const days = Array.isArray(j.days) ? j.days : [];
+    const wanted = cfg.lookahead >= 168 ? 7 : 3;
+    const trimmed = days.slice(0, wanted);
+    _panchangCache = trimmed;
+    if(trimmed.length){
+      const top = trimmed[0];
+      log(`Panchang (panchang.json, updated ${j.generated_at_utc||"—"}): Tithi=${top.tithi||"—"} · Nakshatra=${top.nakshatra||"—"} · ${top.date||""}`, kind);
+      return trimmed;
+    } else {
+      log(`panchang.json has no day data yet (Action may not have run) — falling back to Gemini search grounding.`, kind);
+      return null;
+    }
+  }catch(e){
+    _panchangCache = [];
+    log(`panchang.json unavailable — falling back to Gemini search grounding. Detail: ${e.message}`, kind);
+    return null;
+  }
+}
+
+function panchangSeedBlock(panchangDays){
+  if(!panchangDays || !panchangDays.length) return "No live Panchang data available — research the Panchang yourself via Google Search.";
+  return "LIVE PANCHANG DATA (Prokerala, Bengaluru/Karnataka, refreshed daily — treat as authoritative for dates/tithi/nakshatra/day; you still research the event's NAME/significance/rituals/festival context yourself):\n" +
+    panchangDays.map(d => `- ${d.date} (${d.day||"?"}): Tithi=${d.tithi||"unknown"}, Nakshatra=${d.nakshatra||"unknown"}${d.lunar_month?`, Lunar month=${d.lunar_month}`:""}${d.vrat?`, Vrat/Observance=${d.vrat}`:""}`).join("\n");
+}
+
+/* ============================================================
+   PROMPT BUILDERS — VEDIC ENGINE (IMAGE AGENT)
+   ============================================================ */
+const KARNATAKA_CALENDAR_NOTE = `Regional note: weigh Karnataka / South Indian almanac conventions (Amanta lunar month system, as used in Karnataka/South India) alongside the Purnimanta system used in North India — if a date or tithi differs between the two traditions, prefer the Amanta/South Indian reading and note it briefly in the significance if relevant.`;
+const TEXT_OVERLAY_NOTE = `For Part 1 & 2 (info cards), the on-image text is the literal event details (event name / day+date / significance line / rituals list) laid out per the card design above — keep wording SHORT and legible per zone. For Part 3 (devotional scene), the on-image text overlay must be SHORT (2–6 words) and impactful, different from any text used in Parts 1–2.`;
+
+function eventSelectionBlock(panchangSeed){
+  return `EVENT SELECTION LOGIC: From the Panchang data and your own research, identify candidate Hindu calendar events (Amavasya, Ekadashi, Purnima, Sankashti Chaturthi, named festivals, etc.) across the window below. Pick the TOP 1 upcoming event within the next 72 hours (IST) if one stands out; if nothing within 72 hours is culturally significant enough, pick the most culturally relevant upcoming event within the next 7 days instead.
+
+${panchangSeed}
+
+${KARNATAKA_CALENDAR_NOTE}`;
+}
+
+function imageGenPrompt(panchangSeed){
+  return `You are the IMAGE GENERATION AGENT of a Vedic Content Generation Engine, producing cinematic devotional IMAGE concepts for a single Instagram post (1:1).
+
+OUTPUT RULE: final message = ONLY a raw JSON array. No commentary, no markdown fences. Do internal research first; output JSON last.
+
+${eventSelectionBlock(panchangSeed)}
+
+Once the event is chosen, use Google Search to confirm/expand its real significance (meaning, what it commemorates, what devotees observe/which rituals are performed) and any directly relevant authentic visual motifs. Ground every fact in real tradition — never invent an event, tithi, nakshatra, significance, or ritual. If the event isn't tied to one specific deity (e.g. Amavasya, Ekadashi, Purnima), do NOT force a deity into Part 3's scene — generic devotional/festival/temple imagery (diyas, sacred geometry, temple architecture, ritual offerings, moonlight/lunar motifs, fasting/prayer scenes as fits the event) is expected and preferred; only depict a specific deity if the event is genuinely deity-specific (e.g. Shivaratri → Shiva, Ekadashi → Vishnu, Ganesh Chaturthi → Ganesha).
+
+CONCEPTS: Produce EXACTLY 3 image concepts, all anchored to the SAME chosen event, sharing a consistent devotional-gold style/palette across all 3, with these THREE DIFFERENT roles:
+
+- PART 1 — "Event details card": a devotional-style INFO CARD (NOT a scene with figures) — ornate temple-gold aesthetic with diya and lotus motifs framing the border, a clear top banner zone displaying the EVENT NAME in bold ornamental lettering, with the DAY and DATE shown clearly beneath it. Background is a soft temple-gold/marigold gradient or subtle sacred-geometry pattern — readable, uncluttered, designed so the text is the focal point.
+- PART 2 — "Event details card": the SAME devotional info-card aesthetic and palette as Part 1 (consistent border motifs, consistent gold tone) but now displaying the SIGNIFICANCE (1 short, punchy on-card line, not the full paragraph) and the RITUALS (a short bulleted-style list of 2–3 things devotees do), laid out in a clean body-text zone beneath a smaller header banner.
+- PART 3 — "Devotional scene": a full cinematic DEVOTIONAL SCENE (figures/deity-or-generic-ritual imagery as appropriate, NOT a card/text layout) consistent in palette/tone with Parts 1–2, capturing the lived emotional moment of the event (the ritual itself, the blessing, the atmosphere), with a SHORT (2–6 word) on-image text overlay woven in naturally — this is the only part with a scene rather than an info card.
+
+FIELDS (per part, same chosen event across all 3):
+- event_name: the real event/observance name (e.g. "Vaikuntha Ekadashi", "Kartik Amavasya").
+- day: the real day of the week for this event (e.g. "Saturday").
+- tithi: the real tithi for this event (from the Panchang data above or your research).
+- nakshatra: the real nakshatra for this event/date.
+- significance: 1–2 sentences, factual, sourced from real tradition — what the event means and why it matters.
+- rituals: 1 sentence or short comma-separated list of real, factual rituals/observances devotees perform for this event (e.g. fasting, specific puja, lighting diyas, temple visits, mantra recitation).
+- image_prompt: MUST be EXACTLY this concatenation, nothing else added: "Generate 4K, Cinematic Vedic Image, 1:1 ratio, " + event_name + ", " + a short description of THIS PART's visual content per its role above (Part 1/2 = info card layout instructions per the CONCEPTS section, including the literal event_name/day/date/significance-line/rituals-list text that should appear on the card; Part 3 = devotional scene description ending with a short on-image text overlay, no full sentences, no "generate/create" wording). ${TEXT_OVERLAY_NOTE}
+- caption: a clear, respectful, devotional/inspirational caption (1–2 sentences) naming the real event, sequence-aware (Part 1/2/3 of the arc). Light tasteful emojis only (om, lotus, diya). End with EXACTLY 4 relevant hashtags (e.g. #SanatanDharma + 3 event-specific).
+- best_posting_time: a single best posting time suggestion in IST (e.g. "7:00 PM IST"), reasoned from the event's nature (a dusk ritual suggests evening; a sunrise observance suggests morning) — if no strong reasoning exists, default to a generally high-engagement window like "7:30 PM IST".
+
+VIRALITY: every concept must land in 3 seconds, use highly visual (not generic) language, carry a cinematic + spiritual tone, and trigger curiosity/urgency/emotional connection. No repeated phrasing across the 3 parts — each must feel unique. Never satirical or irreverent.
+
+JSON VALIDITY: if any field's text includes a quoted phrase (e.g. a mantra, scripture line, or quoted saying), you MUST escape the double-quote characters inside it with a backslash (\\") so the JSON stays valid — never leave a raw, unescaped " inside a string value.
+
+Return ONLY a JSON array of 3 objects, IN ORDER (Part 1 = Event details card, Part 2 = Event details card, Part 3 = Devotional scene), keys: "event_name","day","tithi","nakshatra","significance","rituals","image_prompt","caption","best_posting_time".`;
+}
+
+/* ============================================================
+   PROMPT BUILDERS — VEDIC ENGINE (VIDEO AGENT)
+   ============================================================ */
+function videoGenPrompt(panchangSeed){
+  return `You are the VIDEO GENERATION AGENT of a Vedic Content Generation Engine, producing 3 short cinematic devotional VIDEO concepts (9:16, 10 seconds each, for Instagram Reels).
+
+OUTPUT RULE: final message = ONLY a raw JSON array. No commentary, no markdown fences. Do internal research/citing first; output JSON last.
+
+${eventSelectionBlock(panchangSeed)}
+
+Once the event is chosen, use Google Search to confirm/expand its real significance and the rituals devotees observe. Ground every fact in real tradition — never invent an event, tithi, nakshatra, significance, or ritual.
+
+CONCEPTS: Produce EXACTLY 3 videos, ALL anchored to the SAME single chosen event (not 3 different events), connected by ONE shared overarching theme/voice and a consistent devotional-gold visual identity across all 3. Each video keeps its Hook/Value/CTA narrative role, reskinned visually as follows:
+- VIDEO 1 → HOOK · info card: curiosity + urgency, introduces the event. Visual treatment is a devotional-style INFO CARD in motion (NOT a live scene) — ornate temple-gold aesthetic with diya/lotus border motifs, the EVENT NAME animating into a bold top banner with the DAY and DATE appearing beneath it (e.g. text building in, banner unfurling, or diyas igniting to reveal the name).
+- VIDEO 2 → VALUE · info card: explains the event's significance/benefit. SAME devotional info-card aesthetic and palette as Video 1, now animating in the SIGNIFICANCE (1 short punchy line) and the RITUALS (a short 2–3 item list of what devotees do), e.g. lines appearing one by one or icons animating in beside each ritual.
+- VIDEO 3 → CTA / IMPACT · devotional scene: drives action/belief/emotional trigger. Visual treatment SWITCHES to a full cinematic DEVOTIONAL SCENE (figures/deity-or-generic-ritual imagery as appropriate, NOT a card layout) consistent in palette/tone with Videos 1–2, capturing the lived emotional moment of the event with camera motion building to a climax.
+
+For each video, ground it via real lore/significance/rituals for the chosen event, authentic symbolism where relevant for Video 3 (skip deity-specific symbolism if the event isn't deity-specific; never force a deity into Videos 1–2's card layout), a breathtaking 10-second shot with camera motion (an opening move + a climax move; slow motion only at a genuine high-energy or emotional climax in Video 3, never forced into Videos 1–2's calmer card reveal), cinematic lighting (volumetric light as a near-default, animating across the shot), and a respectful/majestic/devotional tone — never satirical or irreverent.
+
+FIELDS (per video, SAME chosen event across all 3):
+- event_name: the real event/observance name (identical across all 3 videos).
+- day: the real day of the week for this event (identical across all 3 videos).
+- tithi: the real tithi for this event (identical across all 3 videos).
+- nakshatra: the real nakshatra for this event/date (identical across all 3 videos).
+- significance: 1–2 sentences, factual, sourced from real tradition (identical across all 3 videos).
+- rituals: 1 sentence or short comma-separated list of real, factual rituals/observances for this event (identical across all 3 videos).
+- video_prompt: MUST start with EXACTLY this concatenation: "Generate 4K, Cinematic Vedic Video, 9:16 ratio, " + event_name + ", " + a short summary of THIS VIDEO's visual treatment per its role above (Video 1/2 = info-card-in-motion layout instructions including the literal text/lines that animate in; Video 3 = devotional scene description), then continue as ONE cohesive cinematic description in comma-separated descriptive phrases (no full sentences, no "generate/create" wording) that weaves in CAMERA MOTION, LIGHTING, SCENE PROGRESSION/TIMING across the 10s, and a BACKGROUND MUSIC suggestion (e.g. "underscored by a building tabla-and-tanpura swell" or "low Om-chant drone rising to a bell strike at the climax") naturally into the prose, ending on the mood/atmosphere beat. Do NOT use the words "hyper-realistic" or "HDR" anywhere.
+- on_screen_text: the SHORT (2–6 word), high-impact on-screen text for this video, matching its beat — Video 1 a curiosity/urgency hook line, Video 2 a value/significance line, Video 3 an action/belief CTA line. Must differ across all 3 videos.
+- caption: a respectful devotional/inspirational caption (1–2 sentences) naming the real event, sequence-aware (Hook/Value/CTA of the arc). Light tasteful emojis only (om, lotus, diya). End with EXACTLY 4 relevant hashtags (e.g. #SanatanDharma + 3 event-specific).
+- best_posting_time: a single best posting time suggestion in IST for this video, reasoned from its beat (e.g. hook videos often perform best in evening scroll windows) — default to "7:30 PM IST" if no stronger reasoning applies.
+
+VIRALITY: highly visual language, no generic phrasing, cinematic + spiritual tone throughout, and curiosity/urgency/emotional-connection triggers appropriate to each video's beat. No repetition across the 3 videos — each must feel unique even though unified by the same event and shared visual identity.
+
+JSON VALIDITY: if any field's text includes a quoted phrase (e.g. a mantra, scripture line, or quoted saying), you MUST escape the double-quote characters inside it with a backslash (\\") so the JSON stays valid — never leave a raw, unescaped " inside a string value.
+
+Return ONLY a JSON array of 3 objects, IN ORDER (Video 1=Hook/info card, Video 2=Value/info card, Video 3=CTA/devotional scene), keys: "event_name","day","tithi","nakshatra","significance","rituals","video_prompt","on_screen_text","caption","best_posting_time".`;
+}
+
+/**
+ * Repairs the most common ways an LLM's "JSON" breaks: unescaped double-quotes,
+ * newlines/tabs, or other control characters INSIDE a string value (e.g. a meme
+ * headline that itself quotes someone: "He said "this is unfair" today").
+ *
+ * A regex like /"(?:[^"\\]|\\.)*"/ cannot solve this correctly — it has no way
+ * to know whether a quote it encounters is the string's real closing delimiter
+ * or just a quote character that belongs inside the content, so it always
+ * guesses wrong on inputs like the example above and corrupts the JSON. The
+ * only reliable fix is a real scan: walk the text once, track whether we're
+ * inside a string, and for every quote character we hit while inside a string,
+ * decide using lookahead whether it's actually closing the string (i.e. the
+ * next non-whitespace character is one of , } ] : or end-of-text) or whether
+ * it's a quote that belongs in the content (in which case we escape it).
+ */
+function repairJsonString(t){
+  let out = "";
+  let inString = false;
+  for(let i=0;i<t.length;i++){
+    const ch = t[i];
+
+    if(!inString){
+      out += ch;
+      if(ch === '"') inString = true;
+      continue;
+    }
+
+    // inString === true
+    if(ch === "\\"){
+      // Preserve existing escape sequences as-is (e.g. \" \\ \n already valid).
+      out += ch;
+      if(i+1 < t.length){ out += t[i+1]; i++; }
+      continue;
+    }
+
+    if(ch === '"'){
+      // Look ahead past whitespace to decide if this quote is a real closer.
+      let j = i+1;
+      while(j < t.length && /\s/.test(t[j])) j++;
+      const next = t[j];
+      const isRealCloser = (next===undefined || ",}]:".includes(next));
+      if(isRealCloser){
+        out += '"';
+        inString = false;
+      } else {
+        out += '\\"'; // a quote that belongs inside the content — escape it.
+      }
+      continue;
+    }
+
+    if(ch === "\n"){ out += "\\n"; continue; }
+    if(ch === "\r"){ out += "\\r"; continue; }
+    if(ch === "\t"){ out += "\\t"; continue; }
+    if(/[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(ch)) continue; // drop other control chars
+
+    out += ch;
+  }
+  return out;
+}
+
+function extractArray(text){
+  let t = text.trim().replace(/^```(?:json)?/i,"").replace(/```$/,"").trim();
+  const s = t.indexOf("["), e = t.lastIndexOf("]");
+  if(s===-1||e===-1||e<s) throw new Error("Could not find JSON in the model output.");
+  const slice = t.slice(s, e+1);
+
+  // Fast path: well-formed JSON parses immediately, no repair needed.
+  try{ return JSON.parse(slice); }catch(firstErr){}
+
+  // Slow path: the model likely left an unescaped quote/control character
+  // inside a string value. Repair it with a real scan, then retry.
+  try{
+    return JSON.parse(repairJsonString(slice));
+  }catch(secondErr){
+    throw new Error(`Model output wasn't valid JSON even after repair (${secondErr.message}). Try running again.`);
+  }
+}
+
+/* ============================================================
+   RUN FLOW
+   ============================================================ */
+const KIND_META = {
+  press:  { runBtn:"runMemes",  icon:"🗞️", genPrompt:pressGenPrompt,  promptKey:"image_prompt", emptyIcon:"🗞️",
+            emptyMsg:"No memes yet. Run the crew to pull live headlines and craft 3 meme prompts + captions." },
+  divine: { runBtn:"runImage",  icon:"🕉️", genPrompt:imageGenPrompt,  promptKey:"image_prompt",  emptyIcon:"🕉️",
+            emptyMsg:"No prompts yet. Run the Vedic Image Agent for 2 event-details cards + 1 devotional scene." },
+  video:  { runBtn:"runVideo",  icon:"🎞️", genPrompt:videoGenPrompt,  promptKey:"video_prompt",  emptyIcon:"🎞️",
+            emptyMsg:"No prompts yet. Run the Vedic Video Agent for one event told across Hook/Value (info cards) and a CTA (devotional scene)." }
+};
+function busyFlag(kind, val){
+  if(kind==="press") { if(val!==undefined) busyPress=val; return busyPress; }
+  if(kind==="divine"){ if(val!==undefined) busyDivine=val; return busyDivine; }
+  if(kind==="video") { if(val!==undefined) busyVideo=val; return busyVideo; }
+}
+function setBusy(kind, b){
+  busyFlag(kind, b);
+  const meta = KIND_META[kind];
+  document.getElementById(meta.runBtn).disabled = b;
+  if(kind==="press"){ document.getElementById("clearBtn-memes").disabled = b; }
+  else { document.getElementById("clearBtn-divine").disabled = (busyDivine || busyVideo); }
+}
+function spinOn(id){
+  const btn=document.getElementById(id);
+  btn.dataset.txt = btn.querySelector(".bt").textContent;
+  btn.querySelector(".bi").outerHTML = '<span class="spin"></span>';
+}
+function spinOff(id, icon){
+  const btn=document.getElementById(id);
+  const sp=btn.querySelector(".spin"); if(sp) sp.outerHTML = `<span class="bi">${icon}</span>`;
+}
+
+async function runCrew(kind){
+  if(!preflight()) return;
+  if(busyFlag(kind)) return;
+  setBusy(kind, true);
+  const meta = KIND_META[kind];
+  spinOn(meta.runBtn);
+  showSkeletons(kind);
+  log(`Crew — starting…`, kind);
+
+  try{
+    let panchangDays = null;
+    if(kind==="divine" || kind==="video"){
+      log(`Fetching live Panchang (Prokerala, Bengaluru/Karnataka)…`, kind);
+      panchangDays = await fetchPanchangWindow(kind);
+    }
+
+    const grounded = !!cfg.useSearch;
+    if(kind==="press"){
+      log(grounded
+        ? `Scout: researching (live search ON, last ${cfg.window}h IST)…`
+        : `Scout: live search OFF — drafting from model knowledge (quota-saving mode)…`, kind);
+    } else {
+      log(grounded
+        ? `Scout: researching event significance (live search ON, next ${cfg.lookahead}h IST)…`
+        : `Scout: live search OFF — drafting from model knowledge (quota-saving mode)…`, kind);
+    }
+    const seed = (kind==="divine" || kind==="video") ? panchangSeedBlock(panchangDays) : null;
+    const genText = await callGemini(meta.genPrompt(seed), grounded);
+    let items = extractArray(genText).slice(0,3);
+    log(`Crew drafted ${items.length} prompt(s).`, kind);
+
+    data[kind] = items;
+    renderCards(kind);
+    log(`Prompts ready on screen.`, "ok");
+
+  }catch(err){
+    log(err.message||String(err), "err");
+    renderError(kind, err.message||String(err));
+    toast(err.message||"Something went wrong", "err");
+  }finally{
+    spinOff(meta.runBtn, meta.icon);
+    setBusy(kind, false);
+  }
+}
+
+function preflight(){
+  if(isFileProtocol()){
+    toast("Won't work over file:// — host this page or use a local server", "err");
+    log("Blocked: page is open via file:// — Gemini/Panchang requests cannot reach their APIs from a local file. Host this page online or via a local server, then reload.", "err");
+    document.getElementById("fileWarning").classList.add("show");
+    return false;
+  }
+  if(!cfg.gem){ toast("Add your Gemini API key first", "err"); log("No Gemini key set — open Settings.", "err"); openSettings(); return false; }
+  return true;
+}
+
+/* ============================================================
+   RENDERING
+   ============================================================ */
+function laneEl(kind){ return document.getElementById(kind==="press"?"cardsPress":kind==="divine"?"cardsDivine":"cardsVideo"); }
+function countEl(kind){ return document.getElementById(kind==="press"?"countPress":kind==="divine"?"countDivine":"countVideo"); }
+function setCount(kind,n){ countEl(kind).textContent=n; }
+
+function showSkeletons(kind){
+  const el=laneEl(kind); el.innerHTML="";
+  for(let i=0;i<3;i++){ const s=document.createElement("div"); s.className="skel"; el.appendChild(s); }
+  setCount(kind,0);
+}
+function renderError(kind,msg){
+  const el=laneEl(kind); el.innerHTML="";
+  const d=document.createElement("div"); d.className="empty-state";
+  d.innerHTML=`<div class="big">⚠️</div>`;
+  const p=document.createElement("p"); p.textContent=msg; d.appendChild(p);
+  el.appendChild(d); setCount(kind,0);
+}
+function renderCards(kind){
+  const el=laneEl(kind); el.innerHTML="";
+  const items=data[kind];
+  items.forEach((it,i)=>el.appendChild(buildCard(kind,it,i)));
+  setCount(kind, items.length);
+}
+
+const IMAGE_ROLE_LABELS = ["Event details card","Event details card","Devotional scene"];
+const VIDEO_ROLE_LABELS = ["Hook · info card","Value · info card","CTA · devotional scene"];
+
+function buildCard(kind, it, i){
+  const meta = KIND_META[kind];
+  const card=document.createElement("div");
+  card.className="card lane-"+kind;
+  card.style.animationDelay=(i*60)+"ms";
+
+  const top=document.createElement("div"); top.className="card-top";
+  const idx=document.createElement("div"); idx.className="idx"; idx.textContent=(i+1);
+  const ttl=document.createElement("div"); ttl.className="ttl";
+  ttl.textContent = kind==="press" ? (it.headline||"Meme") : (it.event_name||"Vedic Event");
+  top.append(idx,ttl);
+  if(kind==="divine" || kind==="video"){
+    const roleLabel = kind==="divine" ? IMAGE_ROLE_LABELS[i] : VIDEO_ROLE_LABELS[i];
+    if(roleLabel){
+      const rolePill = document.createElement("span"); rolePill.className="pill role-pill";
+      rolePill.textContent = roleLabel;
+      top.appendChild(rolePill);
+    }
+  }
+  card.appendChild(top);
+
+  const body=document.createElement("div"); body.className="card-body";
+
+  if(kind==="divine" || kind==="video"){
+    const metaBits = [];
+    if(it.day) metaBits.push(`Day: ${it.day}`);
+    if(it.tithi) metaBits.push(`Tithi: ${it.tithi}`);
+    if(it.nakshatra) metaBits.push(`Nakshatra: ${it.nakshatra}`);
+    if(it.best_posting_time) metaBits.push(`Best post: ${it.best_posting_time}`);
+    if(metaBits.length){
+      const metaRow = document.createElement("div"); metaRow.className="card-meta";
+      metaRow.textContent = metaBits.join(" · ");
+      body.appendChild(metaRow);
+    }
+    if(it.significance){
+      const sig = document.createElement("p"); sig.className="card-sig";
+      sig.textContent = it.significance;
+      body.appendChild(sig);
+    }
+    if(it.rituals){
+      const rit = document.createElement("p"); rit.className="card-sig card-rituals";
+      rit.textContent = `Rituals: ${it.rituals}`;
+      body.appendChild(rit);
+    }
+  }
+
+  // image_prompt / video_prompt now already include the full "Generate 4K, Cinematic
+  // Vedic Image/Video, …" prefix as written by the model — no client-side prepending needed.
+  let promptText = it[meta.promptKey] || "";
+  const promptLabel = kind==="video" ? "Video prompt" : "Image prompt";
+  const promptPill = kind==="video" ? "9:16 · 10s" : "1:1";
+  body.appendChild(fieldBlock(promptLabel, promptPill, promptText, "prompt-box"));
+
+  if(kind==="video" && it.on_screen_text){
+    body.appendChild(fieldBlock("On-screen text","important", it.on_screen_text, "caption-box"));
+  }
+
+  body.appendChild(fieldBlock("Caption","4 hashtags", it.caption, "caption-box"));
+
+  card.appendChild(body);
+  return card;
+}
+function fieldBlock(labelText, pillText, content, boxClass){
+  const wrap=document.createElement("div"); wrap.className="field-block";
+  const lab=document.createElement("label");
+  const chev=document.createElement("span"); chev.className="fchev";
+  chev.innerHTML=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="m6 9 6 6 6-6"/></svg>`;
+  lab.appendChild(document.createTextNode(labelText));
+  if(pillText){ const pill=document.createElement("span"); pill.className="pill"; pill.textContent=pillText; lab.appendChild(pill); }
+  const cp=document.createElement("button"); cp.className="copybtn";
+  cp.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy`;
+  cp.addEventListener("click", (e)=>{ e.stopPropagation(); copyText(content||"", cp); });
+  lab.appendChild(cp);
+  lab.appendChild(chev);
+  const box=document.createElement("div"); box.className=boxClass; box.textContent=content||"—";
+  lab.addEventListener("click", ()=>wrap.classList.toggle("collapsed"));
+  wrap.append(lab,box);
+  if(window.innerWidth<=640) wrap.classList.add("collapsed");
+  return wrap;
+}
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function esc(s){ return String(s??""); }
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+/* ---- clear controls ---- */
+function resetLane(kind){
+  const meta = KIND_META[kind];
+  const el = laneEl(kind);
+  const wrap=document.createElement("div"); wrap.className="empty-state";
+  const big=document.createElement("div"); big.className="big"; big.textContent=meta.emptyIcon;
+  const p=document.createElement("p"); p.textContent=meta.emptyMsg;
+  wrap.append(big,p); el.innerHTML=""; el.appendChild(wrap);
+  setCount(kind,0);
+}
+function clearWorkspace(tabName){
+  const kinds = tabName==="press" ? ["press"] : ["divine","video"];
+  if(kinds.some(k=>busyFlag(k))){ toast("Wait for the run to finish","err"); return; }
+  kinds.forEach(k=>{ data[k]=[]; resetLane(k); });
+  if(tabName==="press"){
+    document.getElementById("log-memes").innerHTML='<div class="empty">// cleared — run the crew again whenever you like.</div>';
+    logClearedMemes=false;
+  } else {
+    document.getElementById("log-divine").innerHTML='<div class="empty">// cleared — run a crew again whenever you like.</div>';
+    logClearedDivine=false;
+  }
+  toast("Logs & results cleared","ok");
+}
+function eraseAll(){
+  if(!confirm("Erase your saved Gemini key and all preferences from this browser? This also clears current results and logs. This cannot be undone.")) return;
+  try{
+    localStorage.removeItem(LS); localStorage.removeItem(LS_CONSOLE);
+    localStorage.removeItem(LS_LANE); localStorage.removeItem(LS_GROUPS); localStorage.removeItem(LS_TAB);
+  }catch(e){}
+  Object.assign(cfg,{
+    gem:"", model:"gemini-2.5-flash", window:24, useSearch:1,
+    region:"Karnataka", lookahead:72
+  });
+  document.getElementById("setGem").value="";
+  document.getElementById("setModel").value="gemini-2.5-flash";
+  document.getElementById("setRegion").value="Karnataka";
+  document.querySelectorAll("#segWindow button").forEach(b=>b.classList.toggle("active", b.dataset.v==="24"));
+  document.querySelectorAll("#segLookahead button").forEach(b=>b.classList.toggle("active", b.dataset.v==="72"));
+  document.querySelectorAll("#segSearch button").forEach(b=>b.classList.toggle("active", b.dataset.v==="1"));
+  refreshChips(); setModelUI();
+  clearWorkspace("press"); clearWorkspace("divine");
+  toast("All saved data erased","ok");
+}
+async function copyText(text, btn){
+  try{ await navigator.clipboard.writeText(text); }
+  catch(e){ const ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); }
+  const orig=btn.innerHTML; btn.classList.add("done");
+  btn.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>Copied`;
+  setTimeout(()=>{ btn.classList.remove("done"); btn.innerHTML=orig; },1400);
+}
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSettings(); });
+
+/* ============================================================
+   EVENT WIRING (replaces former inline onclick="" attributes)
+   ============================================================ */
+function wireStaticButtons(){
+  document.getElementById("openSettingsBtn").addEventListener("click", openSettings);
+  document.getElementById("closeSettingsBtn").addEventListener("click", closeSettings);
+  document.getElementById("scrim").addEventListener("click", closeSettings);
+  document.getElementById("saveSettingsBtn").addEventListener("click", saveSettings);
+  document.getElementById("eraseAllBtn").addEventListener("click", eraseAll);
+  document.getElementById("toggleGemPw").addEventListener("click", function(){ togglePw("setGem", this); });
+
+  document.getElementById("runMemes").addEventListener("click", ()=>runCrew("press"));
+  document.getElementById("runImage").addEventListener("click", ()=>runCrew("divine"));
+  document.getElementById("runVideo").addEventListener("click", ()=>runCrew("video"));
+  document.getElementById("clearBtn-memes").addEventListener("click", ()=>clearWorkspace("press"));
+  document.getElementById("clearBtn-divine").addEventListener("click", ()=>clearWorkspace("divine"));
+  document.getElementById("fileWarningClose").addEventListener("click", ()=>{
+    document.getElementById("fileWarning").classList.remove("show");
+  });
+}
+
+function wireTabs(){
+  document.querySelectorAll(".tabbtn[data-tab]").forEach(btn=>{
+    btn.addEventListener("click", ()=>switchTab(btn.dataset.tab));
+  });
+}
+
+function wireLaneToggles(){
+  document.querySelectorAll(".laneToggle[data-lane]").forEach(btn=>{
+    btn.addEventListener("click", ()=>toggleLane(btn.dataset.lane));
+  });
+}
+
+function wireConsoleToggles(){
+  document.querySelectorAll(".console-bar[data-console]").forEach(bar=>{
+    bar.addEventListener("click", ()=>toggleConsole(bar.dataset.console));
+  });
+}
+
+function wireSettingsGroups(){
+  document.querySelectorAll(".group-title[data-group]").forEach(btn=>{
+    btn.addEventListener("click", ()=>toggleGroup(btn.dataset.group));
+  });
+}
+
+function wireSegmentedControls(){
+  document.querySelectorAll("#segSearch button").forEach(btn=>{
+    btn.addEventListener("click", function(){ setSearch(Number(this.dataset.v), this); });
+  });
+  document.querySelectorAll("#segWindow button").forEach(btn=>{
+    btn.addEventListener("click", function(){ setWindow(Number(this.dataset.v), this); });
+  });
+  document.querySelectorAll("#segLookahead button").forEach(btn=>{
+    btn.addEventListener("click", function(){ setLookahead(Number(this.dataset.v), this); });
+  });
+}
+
+/* ============================================================
+   file:// DETECTION — Gemini and Panchang fetches cannot reach
+   their APIs from a file:// page (no usable browser origin).
+   Warn once per session and disable the run buttons so users
+   don't sit through a ~100s retry-then-fail cycle for nothing.
+   ============================================================ */
+function isFileProtocol(){ return window.location.protocol === "file:"; }
+
+function disableRunButtonsForFileProtocol(){
+  ["runMemes","runImage","runVideo"].forEach(id=>{
+    const btn = document.getElementById(id);
+    if(btn){
+      btn.disabled = true;
+      btn.title = "Disabled: this page is open via file:// — Gemini/Panchang requests are blocked from local files. Host it online or via a local server first.";
+    }
+  });
+}
+
+function checkFileProtocol(){
+  if(!isFileProtocol()) return;
+  disableRunButtonsForFileProtocol();
+  let alreadyShown = false;
+  try{ alreadyShown = sessionStorage.getItem("promptlab_file_warning_shown") === "1"; }catch(e){}
+  if(alreadyShown) return;
+  const el = document.getElementById("fileWarning");
+  if(el) el.classList.add("show");
+  try{ sessionStorage.setItem("promptlab_file_warning_shown","1"); }catch(e){}
+}
+
+function init(){
+  wireStaticButtons();
+  wireTabs();
+  wireLaneToggles();
+  wireConsoleToggles();
+  wireSettingsGroups();
+  wireSegmentedControls();
+
+  loadSettings();
+  initTab();
+  initGroupStates();
+  initConsoleState();
+  initLaneStates();
+  checkFileProtocol();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", init);
+} else {
+  init();
+}
+</script>
+</body>
+</html>

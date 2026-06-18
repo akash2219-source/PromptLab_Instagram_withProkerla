@@ -1,0 +1,7 @@
+{
+  "generated_at_utc": null,
+  "location": "Bengaluru, Karnataka, India",
+  "coordinates": "12.9716,77.5946",
+  "days": [],
+  "note": "Placeholder \u2014 this file is overwritten daily by the Update Panchang data GitHub Action once PROKERALA_CLIENT_ID/SECRET are set as repo secrets and the workflow has run at least once."
+}
