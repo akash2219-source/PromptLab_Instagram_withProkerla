@@ -1,0 +1,39 @@
+name: Update Panchang data
+
+on:
+  schedule:
+    - cron: "30 0 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  update-panchang:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Fetch Panchang data
+        env:
+          PROKERALA_CLIENT_ID: ${{ secrets.PROKERALA_CLIENT_ID }}
+          PROKERALA_CLIENT_SECRET: ${{ secrets.PROKERALA_CLIENT_SECRET }}
+        run: python3 scripts/fetch_panchang.py
+
+      - name: Commit panchang.json if it changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --quiet -- panchang.json; then
+            echo "panchang.json unchanged — nothing to commit."
+          else
+            git add panchang.json
+            git commit -m "Update panchang.json [automated]"
+            git push
+          fi
